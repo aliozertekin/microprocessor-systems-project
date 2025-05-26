@@ -29,10 +29,6 @@ Proje, basit ve düşük maliyetli donanım bileşenleriyle güvenli bir sistem 
 |Jumper Kablolar|Bağlantılar için|
 |Breadboard|Lehim gerektirmeden devre kurmak için|
 
-##  Devre Şeması
-
-(Schematics ya da Fritzing çizimi varsa buraya PNG olarak eklenebilir)
-
 ##  Sistem Mantığı
 
 - Gaz sensörü ortamdan sürekli analog veri okur.
