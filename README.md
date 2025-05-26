@@ -76,4 +76,4 @@ void setup()
 
 ## Lisans
 
-Bu proje eğitim amacıyla yapılmıştır. Her türlü akademik kullanım serbesttir. Ticari kullanım için lütfen geliştiricilerle iletişime geçiniz.
+Bu proje eğitim amacıyla yapılmıştır. Her türlü kullanım serbesttir.
