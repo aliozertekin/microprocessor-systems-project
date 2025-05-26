@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Ders Adı:
+
+Mikroişlemcili Sistemler ve Laboratuvarları
+
+###  Proje Adı:
+
+-Zehirli soba gazı tespit ve tahliyesi
+###  Hazırlayanlar:
+
+-Ali Özer TEKİN (222511037)
+-İslam AKSOY (222511029)
+-Muhammet Yiğit CAN (222511013)
+
+###  Öğretim Görevlisi:
+
+-*Doç. Dr. MUSTAFA YAĞCI*
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Proje Amacı
+
+Bu projenin amacı, ortamdaki zararlı gaz seviyesini algılayarak tehlike durumunda kullanıcıyı hem sesli (buzzer) hem fiziksel (fan) yollarla uyaran bir sistem geliştirmektir. Sistem, gaz yoğunluğu tehlikeli seviyeye ulaştığında otomatik olarak devreye girerek ortamı havalandırır ve kullanıcıyı uyarır.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Kullanılan Yöntem ve Malzemeler
+
+Proje, Arduino Uno tabanlıdır. Kullanılan temel bileşenler:
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### 1. MQ Serisi Gaz Sensörü
+
+- Ortamdaki gaz yoğunluğunu ölçer.
+    
+- Analog çıkış verir; Arduino bu çıkışı okuyarak gaz seviyesini tespit eder.
+    
+- Genellikle MQ-2, MQ-7 gibi sensörler LPG, CO ve duman gibi gazları algılayabilir.
+    
+- Sensörden gelen analog değer, eşik değeri geçerse sistem uyarı verir.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### 2. Aktif Buzzer
+
+- Elektrik verildiğinde otomatik olarak sabit bir ses çıkarır.
+    
+- Kullanıcıya sesli uyarı vermek için kullanılır.
+    
+- Dijital çıkışla (HIGH/LOW) kolayca kontrol edilebilir.
+    
+- Gaz seviyesi eşik değeri aşarsa buzzer bip sesiyle kullanıcıyı uyarır.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### 3. 5V DC Fan
+
+- Ortamda gaz tespit edildiğinde havalandırma sağlamak amacıyla çalışır.
+    
+- Fan, gazın yoğunluğunu azaltmak ve tehlikeyi bertaraf etmek için ortamı temizler.
+    
+- Fan’ın çalışması sayesinde sistem sadece uyarı vermekle kalmaz, aynı zamanda aktif müdahalede de bulunur.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### 4. TIP120 NPN Transistör
+
+- Arduino'nun pinleri sınırlı akım sağlayabildiği için, yüksek akım çeken fan gibi bileşenleri doğrudan süremez.
+    
+- TIP120 transistörü burada bir elektronik anahtar görevi görür.
+    
+- Arduino pininden gelen düşük akım sinyaliyle transistör “iletime” geçer ve fan’a dış kaynaktan akım geçişi sağlar.
+    
+- Bu sayede fan, doğrudan Arduino’ya yük bindirmeden çalıştırılır.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### 5. 1N4007 Diyot
+
+- Transistörün kolektör-emitter uçlarına paralel bağlanır, fan ile aynı yönde ters kutupludur.
+    
+- Fan gibi bobinli yükler kapatıldığında, içlerinde biriken enerji aniden boşalır ve bu “geri gerilim” (indüktif spike) Arduino ya da transistöre zarar verebilir.
+    
+- 1N4007 diyotu, bu ani ters gerilimleri kendi üzerinden geçirerek transistörü ve Arduino'yu korur.
+    
+- Bu işleme teknik olarak “indüktif yük koruması” ya da “flyback diode” uygulaması denir.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### 6. 200 Ohm Direnç
+
+- Arduino’dan transistörün base ucuna giden hat üzerinde bulunur.
+    
+- Base akımını sınırlamak için kullanılır.
+    
+- Bu direnç olmazsa, transistöre fazla akım akabilir ve hem transistöre hem de Arduino pinine zarar verebilir.
+    
+- 200 ohm değeri genellikle yeterli bir sınırlama sağlar.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### 7. Jumper Kabloları ve Breadboard
+
+- Devre elemanlarını birbirine bağlamak için kullanılır.
+    
+- Breadboard, lehimsiz bağlantı yapmayı kolaylaştırır ve test aşamasında devreyi değiştirmeyi pratik hale getirir.
+
+
+Kodlama Arduino IDE ile gerçekleştirilmiş, sistem hem fiziksel olarak hem Proteus üzerinden test edilmiştir.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<img src="files/random/WhatsApp Görsel 2025-05-25 saat 15.15.13_cd87d8b7.jpg" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+Fan, Arduino'nun sağlayamayacağı akım ihtiyacını karşılamak amacıyla NPN transistör (TIP120) aracılığıyla çalıştırılmıştır. 1N4007 diyot ise fanın kapandığında oluşabilecek geri akımı engellemek için kullanılmıştır.
+
+<img src="files/random/Pasted image 20250525215623.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+Kodlama işlemleri Arduino IDE ile yapılmış, testler fiziksel olarak gerçekleştirilmiştir.
+
+<img src="files/random/Pasted image 20250525215642.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Gerçekleşme Süreci
+
+Proje fiziksel olarak kurulduğunda, sensör ortamdan sürekli analog veri okumaktadır. Gaz yoğunluğu belirlenen eşik değeri (150) aştığında:
+
+- Buzzer sesli uyarı verir.
+    
+-  Fan otomatik olarak çalışır, havalandırma sağlar.
+    
+- Gaz seviyesi normale döndüğünde sistem otomatik olarak kapanır.
+
+Böylece sistem, kullanıcıya hem sesli hem fiziksel olarak geri bildirim verir. Düşük donanım maliyetiyle pratik ve etkili bir gaz uyarı/havalandırma çözümüdür.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Proteus Simülasyonu
+
+Proteus yazılımı ile sistemin sanal ortamda testi yapılmıştır. Arduino Uno, buzzer, fan ve gaz sensörü Proteus devresine entegre edilmiştir.
+
+Simülasyonda:
+
+- Girişe yüksek analog değer verildiğinde
+    
+- Buzzer ve fan devreye girmiş
+    
+- Sistem başarılı şekilde tepki vermiştir.
+
+Proteus simülasyonu ile devre bağlantılarının doğruluğu ve yazılımın kararlılığı test edilmiştir.
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<img src="WhatsApp Görsel 2025-05-26 saat 00.11.35_48e4006d.jpg" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Projenin Çalıştığına Dair Görsel
+
+
+<img src="files/random/Pasted image 20250525214942.png" alt="" style="object-fit: scale-down">
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Projede Kullanılan Kod
+<img src="WhatsApp Görsel 2025-05-25 saat 15.13.07_b2b495d2.jpg" alt="" style="object-fit: scale-down">
+</div></script></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":960,"height":700,"margin":0.04,"controls":true,"progress":true,"slideNumber":false,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
